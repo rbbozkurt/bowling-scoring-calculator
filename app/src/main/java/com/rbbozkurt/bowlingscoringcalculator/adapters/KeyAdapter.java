@@ -81,7 +81,7 @@ public class KeyAdapter extends RecyclerView.Adapter<KeyAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             //get position of clicked item
-            int position = getAdapterPosition();
+            int position = getBindingAdapterPosition();
             if (position >= 0) {
                 //pass the value of clicked key to listener
                 onKeyItemClickListener.onKeyItemClick(keyList[position].getValue());

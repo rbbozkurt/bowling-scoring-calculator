@@ -1,6 +1,7 @@
 package com.rbbozkurt.bowlingscoringcalculator.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,41 +52,15 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull FrameAdapter.ViewHolder holder, int position) {
 
         //get the frame shown in view
-        BowlingFrame frame = this.frameList[holder.getAdapterPosition()];
+        BowlingFrame frame = this.frameList[position];
+        if(position > 7){
+            System.out.println("addwa");
+        }
+        //bind frame to view
+        holder.bind(frame, position);
 
-        //frame has a strike
-        if(frame.isStrike()){
-            //set first roll blank
-            holder.firstRollScoreText.setText("");
-            //set second roll with strike symbol 'X'
-            holder.secondRollScoreText.setText("X");
-        }
-        //frame has a spare
-        else if (frame.isSpare()){
-            //set score of first roll to view
-            holder.firstRollScoreText.setText(String.valueOf(frame.getFirstRoll()));
-            //set second roll with spare symbol 'X'
-            holder.secondRollScoreText.setText("/");
-        }
-        //frame without strike nor spare
-        else{
-            //first roll of the frame is done
-            if(frame.getFirstRoll() != BowlingUtils.UNROLLED_SCORE){
-                //set score of first roll to view
-                holder.firstRollScoreText.setText(String.valueOf(frame.getFirstRoll()));
-            }
-            //second roll of the frame is done
-            if(frame.getSecondRoll() != BowlingUtils.UNROLLED_SCORE){
-                //set score of first roll to view
-                holder.secondRollScoreText.setText(String.valueOf(frame.getSecondRoll()));
-            }
-        }
-        //frame is finished
-        if(frame.getEndTotalFrameScore() != BowlingUtils.UNCALCULATED_FRAME_SCORE){
-            //set end score of frame
-            holder.totalScoreText.setText(String.valueOf(frame.getEndTotalFrameScore()));
 
-        }
+
     }
 
     @Override
@@ -108,5 +83,59 @@ public class FrameAdapter extends RecyclerView.Adapter<FrameAdapter.ViewHolder> 
             this.totalScoreText = (AppCompatTextView) view.findViewById(R.id.totalFrameScoreText);
 
         }
+
+        /**
+         * bind frame to view holder
+         * @param frame frame to bind
+         * @param position position of the frame
+         */
+
+        public void bind(BowlingFrame frame, int position) {
+
+            //frame has a strike
+            if(frame.isStrike()){
+                //set first roll blank
+                this.firstRollScoreText.setText("");
+                //set second roll with strike symbol 'X'
+                this.secondRollScoreText.setText("X");
+            }
+            //frame has a spare
+            else if (frame.isSpare()){
+                //set score of first roll to view
+                this.firstRollScoreText.setText(String.valueOf(frame.getFirstRoll()));
+                //set second roll with spare symbol 'X'
+                this.secondRollScoreText.setText("/");
+            }
+            //frame without strike nor spare
+            else{
+                //first roll of the frame is done
+                if(frame.getFirstRoll() != BowlingUtils.UNROLLED_SCORE){
+                    //set score of first roll to view
+                    this.firstRollScoreText.setText(String.valueOf(frame.getFirstRoll()));
+                }else{
+                    //set first roll blank
+                    this.firstRollScoreText.setText("");
+
+                }
+                //second roll of the frame is done
+                if(frame.getSecondRoll() != BowlingUtils.UNROLLED_SCORE){
+                    //set score of second roll to view
+                    this.secondRollScoreText.setText(String.valueOf(frame.getSecondRoll()));
+                }else{
+                    //set second roll blank
+                    this.secondRollScoreText.setText("");
+                }
+            }
+            //frame is finished
+            if(frame.getEndTotalFrameScore() != BowlingUtils.UNCALCULATED_FRAME_SCORE){
+                //set end score of frame
+                this.totalScoreText.setText(String.valueOf(frame.getEndTotalFrameScore()));
+            }else{
+                //set end score of frame blank
+                this.totalScoreText.setText("");
+            }
+
+        }
+
     }
 }
